@@ -51,7 +51,7 @@ export default function PurchaseModal({
   useEffect(() => {
     if (mode === "edit") {
         setPurchaseInfo({
-        firmId: purchase.firmId._id || "",
+        firmId: purchase.firmId ? purchase.firmId._id || "" : "",
         brandId: purchase.brandId._id || "",
         productId: purchase.productId._id || "",
         quantity: purchase.quantity || "",
@@ -182,7 +182,7 @@ export default function PurchaseModal({
             onChange={handleChange}
           />
           <Button onClick={handleSubmit} variant="contained">
-            {mode === "edit" ? "Update Sale" : "Add Sale"}
+            {mode === "edit" ? "Update Purchase" : "Add Purchase"}
           </Button>
         </Box>
       </Modal>
