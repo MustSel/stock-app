@@ -73,6 +73,9 @@ const Firms = () => {
                     <Typography variant="body2" color="text.secondary" noWrap>
                       {item.address}
                     </Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>
+                      {item.phone}
+                    </Typography>
                   </Tooltip>
                 </CardContent>
                 <CardActions sx={{ flexGrow: 1, margin: "auto" }}>
