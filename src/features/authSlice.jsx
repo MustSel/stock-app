@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const loadStateFromStorage = () => {
+  const x =1
   try {
     const serializedState = sessionStorage.getItem("user");
     if (serializedState === null) {
@@ -21,6 +22,7 @@ const loadStateFromStorage = () => {
     };
   }
 };
+
 
 
 const initialState = loadStateFromStorage();
