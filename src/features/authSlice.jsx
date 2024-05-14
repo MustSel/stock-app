@@ -1,31 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const loadStateFromStorage = () => {
-  const x =1
-  try {
-    const serializedState = sessionStorage.getItem("user");
-    if (serializedState === null) {
-      return {
-        user: "",
-        token: "",
-        loading: false,
-        error: false
-      };
-    }
-    return JSON.parse(serializedState);
-  } catch (error) {
-    return {
-      user: "",
-      token: "",
-      loading: false,
-      error: false
-    };
-  }
-};
-
-
-
-const initialState = loadStateFromStorage();
+const initialState = {
+  user: "",
+  token: "",
+  loading: false,
+  error: false,
+}
 
 const authSlice = createSlice({
   name: "auth",
@@ -40,12 +20,7 @@ const authSlice = createSlice({
       state.user = payload.user.username
       state.token = payload.token
       state.error = false
-      sessionStorage.setItem("user", JSON.stringify({
-        user:payload.user.username,
-        token:payload.token,
-        loading:false,
-        error:false,
-      }))
+      
     },
     fetchFail: (state) => {
       state.loading = false
@@ -62,7 +37,6 @@ const authSlice = createSlice({
       state.user = ""
       state.token = ""
       state.error = false
-      sessionStorage.removeItem("user")
     }
   },
 })

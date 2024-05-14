@@ -25,12 +25,7 @@ const style = {
 
 export default function FirmModal({ open, setOpen, firm, mode, setMode }) {
   const { postDatas, getDatas, editDatas } = useStockRequest();
-  const [firmInfo, setFirmInfo] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    image: "",
-  });
+  const [firmInfo, setFirmInfo] = useState({});
   
 
   useEffect(() => {

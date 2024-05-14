@@ -1,4 +1,4 @@
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import useStockRequest from '../services/useStockRequest';
 import { useSelector } from 'react-redux';
 import { useEffect } from "react";
@@ -77,7 +77,7 @@ const Products = () => {
         pageSizeOptions={[5, 10, 20, 50, 100]}
         checkboxSelection
         autoHeight
-        
+        slots={{ toolbar: GridToolbar }}
       />
     </div>
     </>
