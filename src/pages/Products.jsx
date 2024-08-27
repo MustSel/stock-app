@@ -10,21 +10,22 @@ import { useState } from 'react';
 
 const Products = () => {
   const { getDatas, deleteDatas } = useStockRequest();
-  const { products, categories, brands } = useSelector((state) => state.getData);
+  const { products, firms, categories } = useSelector((state) => state.getData);
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mode, setMode] = useState("new");
+
   useEffect(() => {
-    getDatas("products")
-    getDatas("brands")
+    getDatas("products");
+    getDatas("firms")
     getDatas("categories")
-  }, [])
+  }, []);
 
   const handleEdit = (row) => {
-    const product = row.product
+    const product = row.product;
     setSelectedProduct(product);
     setOpen(true);
-    setMode("edit")
+    setMode("edit");
   };
 
   const handleDelete = (id) => {
@@ -39,6 +40,7 @@ const Products = () => {
     { field: 'brand', headerName: 'Brand', flex: 1 },
     { field: 'name', headerName: 'Name', flex: 1 },
     { field: 'stock', headerName: 'Stock', flex: 1 },
+    { field: 'firms', headerName: 'Firms', flex: 1 },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -52,36 +54,45 @@ const Products = () => {
     },
   ];
 
-
   const rows = products.map((product) => ({
     id: product._id, 
     category: product.categoryId.name,
     brand: product.brandId.name,
     name: product.name,
     stock: product.quantity,
+    firms: product.firmIds.map(firm => firm.name).join(', '),
     product: product
   }));
 
   return (
     <>
-    <h2>Products</h2>
-    <Button onClick={() => {
-        setOpen(true)
-        setMode("new")
-        }} sx={{mb:"10px"}} variant="contained">New Product</Button>
-        <ProductModal categories={categories} brands={brands} mode={mode} setMode={setMode} open={open} setOpen={setOpen} product={selectedProduct}/>
-    <div style={{width: '100%', height: 400 }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSizeOptions={[5, 10, 20, 50, 100]}
-        checkboxSelection
-        autoHeight
-        slots={{ toolbar: GridToolbar }}
+      <h2>Products</h2>
+      <Button onClick={() => {
+          setOpen(true);
+          setMode("new");
+        }} sx={{mb:"10px"}} variant="contained">
+        New Product
+      </Button>
+      <ProductModal 
+        mode={mode} 
+        setMode={setMode} 
+        open={open} 
+        setOpen={setOpen} 
+        product={selectedProduct}
+        firms={firms}
+        categories={categories}
       />
-    </div>
+      <div style={{width: '100%', height: 400 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
+          checkboxSelection
+          autoHeight
+          slots={{ toolbar: GridToolbar }}
+        />
+      </div>
     </>
-    
   );
 }
 

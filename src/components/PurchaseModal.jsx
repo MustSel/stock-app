@@ -34,12 +34,12 @@ export default function PurchaseModal({
   purchase,
   mode,
   setMode,
-  brands,
-  products,
-  firms
+  firms,
 }) {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const { postDatas, getDatas, editDatas } = useStockRequest();
+  const [products, setProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [purchaseInfo, setPurchaseInfo] = useState({
     firmId: "",
     brandId: "",
@@ -49,8 +49,8 @@ export default function PurchaseModal({
   });
 
   useEffect(() => {
-    if (mode === "edit") {
-        setPurchaseInfo({
+    if (mode === "edit" && purchase) {
+      setPurchaseInfo({
         firmId: purchase.firmId ? purchase.firmId._id || "" : "",
         brandId: purchase.brandId._id || "",
         productId: purchase.productId._id || "",
@@ -58,7 +58,7 @@ export default function PurchaseModal({
         price: purchase.price || "",
       });
     } else {
-        setPurchaseInfo({
+      setPurchaseInfo({
         firmId: "",
         brandId: "",
         productId: "",
@@ -68,6 +68,34 @@ export default function PurchaseModal({
     }
   }, [purchase, open]);
 
+  useEffect(() => {
+    if (purchaseInfo.firmId) {
+      getDatas(`brands?filter[firmIds]=${purchaseInfo.firmId}`)
+        .then(response => {
+          console.log(response?.data);
+          setBrands(response?.data)
+        })
+        .catch(error => console.error("Error fetching brands:", error));
+    }
+    console.log(purchaseInfo);
+    console.log(brands);
+    
+  }, [purchaseInfo.firmId]); // Sadece firmId değiştiğinde tetiklenir
+
+  useEffect(() => {
+    if (purchaseInfo.brandId) {
+      getDatas(`products?filter[brandId]=${purchaseInfo.brandId}`)
+        .then(response => {
+          console.log(response?.data);
+          setProducts(response?.data)
+        })
+        .catch(error => console.error("Error fetching products:", error));
+    }
+    console.log(purchaseInfo);
+    console.log(products);
+    
+  }, [purchaseInfo.brandId]); // Sadece brandId değiştiğinde tetiklenir
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -76,7 +104,25 @@ export default function PurchaseModal({
       [name]: value,
     }));
   };
-  console.log(purchaseInfo);
+
+  const handleFirmChange = (e) => {
+    const { value } = e.target;
+    setPurchaseInfo((prevInfo) => ({
+      ...prevInfo,
+      firmId: value,
+      brandId: "",
+    }));
+  };
+
+  const handleBrandChange = (e) => {
+    const { value } = e.target;
+    setPurchaseInfo((prevInfo) => ({
+      ...prevInfo,
+      brandId: value,
+      productId: "",
+    }));
+  };
+
   const handleClose = () => {
     setOpen(false);
     setMode("new");
@@ -85,7 +131,9 @@ export default function PurchaseModal({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mode === "edit") {
-      editDatas("purchases", purchaseInfo, purchase._id).then(() => getDatas("purchases"));
+      editDatas("purchases", purchaseInfo, purchase._id).then(() =>
+        getDatas("purchases")
+      );
     } else {
       postDatas("purchases", purchaseInfo).then(() => getDatas("purchases"));
     }
@@ -110,9 +158,14 @@ export default function PurchaseModal({
                 id="demo-simple-select"
                 value={purchaseInfo.firmId}
                 label="Firm"
-                onChange={handleChange}
+                onChange={handleFirmChange}
               >
-                <MenuItem sx={{borderBottom:"1px solid grey"}} onClick={()=> navigate("/stock/firms")}>Add New Firm</MenuItem>
+                <MenuItem
+                  sx={{ borderBottom: "1px solid grey" }}
+                  onClick={() => navigate("/stock/firms")}
+                >
+                  Add New Firm
+                </MenuItem>
                 {firms?.map((item) => (
                   <MenuItem key={item._id} value={item._id}>
                     {item.name}
@@ -130,9 +183,14 @@ export default function PurchaseModal({
                 id="demo-simple-select"
                 value={purchaseInfo.brandId}
                 label="Brand"
-                onChange={handleChange}
+                onChange={handleBrandChange}
               >
-                <MenuItem sx={{borderBottom:"1px solid grey"}} onClick={()=> navigate("/stock/brands")}>Add New Brand</MenuItem>
+                <MenuItem
+                  sx={{ borderBottom: "1px solid grey" }}
+                  onClick={() => navigate("/stock/brands")}
+                >
+                  Add New Brand
+                </MenuItem>
                 {brands?.map((item) => (
                   <MenuItem key={item._id} value={item._id}>
                     {item.name}
@@ -152,7 +210,12 @@ export default function PurchaseModal({
                 label="Product"
                 onChange={handleChange}
               >
-                <MenuItem sx={{borderBottom:"1px solid grey"}} onClick={()=> navigate("/stock/products")}>Add New Product</MenuItem>
+                <MenuItem
+                  sx={{ borderBottom: "1px solid grey" }}
+                  onClick={() => navigate("/stock/products")}
+                >
+                  Add New Product
+                </MenuItem>
                 {products?.map((item) => (
                   <MenuItem key={item._id} value={item._id}>
                     {item.name}

@@ -14,7 +14,7 @@ import BrandModal from "../components/BrandModal";
 
 const Brands = () => {
   const { getDatas, deleteDatas } = useStockRequest();
-  const { brands } = useSelector((state) => state.getData);
+  const { brands, categories, firms } = useSelector((state) => state.getData);
   const [open, setOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [mode, setMode] = useState("new");
@@ -23,23 +23,37 @@ const Brands = () => {
   const handleEdit = (brand) => {
     setSelectedBrand(brand);
     setOpen(true);
-    setMode("edit")
+    setMode("edit");
   };
 
   useEffect(() => {
     getDatas("brands");
+    getDatas("categories");
+    getDatas("firms");
   }, []);
 
   return (
     <>
       <h2>Brands</h2>
-      <Button onClick={() => {
-        setOpen(true)
-        setMode("new")
-        }} sx={{ mb: "10px" }} variant="contained">
+      <Button
+        onClick={() => {
+          setOpen(true);
+          setMode("new");
+        }}
+        sx={{ mb: "10px" }}
+        variant="contained"
+      >
         New Brand
       </Button>
-        <BrandModal mode={mode} setMode={setMode} open={open} setOpen={setOpen} brand={selectedBrand} />
+      <BrandModal
+        mode={mode}
+        setMode={setMode}
+        open={open}
+        setOpen={setOpen}
+        brand={selectedBrand}
+        firms={firms} 
+  categories={categories}
+      />
       <Container maxWidth="xl">
         <Grid container spacing={2}>
           {brands?.map((item) => (
@@ -59,16 +73,28 @@ const Brands = () => {
                   <Typography gutterBottom variant="h5" component="div">
                     {item.name}
                   </Typography>
-                </CardContent>
-                <CardMedia
+                  <CardMedia
                   component="img"
                   alt={item.name}
                   height="140"
                   image={item.image}
                   sx={{
                     objectFit: "contain",
+                    marginBottom: "5px"
                   }}
                 />
+                  <Typography variant="body2" color="text.secondary">
+                    Firms: {item.firmIds.map((firm) => firm.name).join(", ")}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Categories:{" "}
+                    {item.categories
+                      .map((category) => category.name)
+                      .join(", ")}
+                  </Typography>
+                </CardContent>
+
+                
                 <CardActions sx={{ flexGrow: 1, margin: "auto" }}>
                   <Button
                     onClick={() => {
@@ -80,7 +106,7 @@ const Brands = () => {
                   >
                     <DeleteOutlineIcon />
                   </Button>
-                  <Button onClick={()=>handleEdit(item)} size="small">
+                  <Button onClick={() => handleEdit(item)} size="small">
                     <EditIcon />
                   </Button>
                 </CardActions>

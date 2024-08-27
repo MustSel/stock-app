@@ -11,7 +11,7 @@ import PurchaseModal from '../components/PurchaseModal';
 
 const Purchases = () => {
   const { getDatas, deleteDatas } = useStockRequest();
-  const { purchases, brands, products, firms } = useSelector((state) => state.getData);
+  const { purchases, firms } = useSelector((state) => state.getData);
   console.log(purchases)
   const [open, setOpen] = useState(false);
   const [selectedPurchase, setSelectedPurchase] = useState(null);
@@ -65,8 +65,6 @@ const Purchases = () => {
 
   useEffect(() => {
     getDatas("purchases")
-    getDatas("brands")
-    getDatas("products")
     getDatas("firms")
   
   }, [])
@@ -77,7 +75,7 @@ const Purchases = () => {
         setOpen(true)
         setMode("new")
         }} sx={{mb:"10px"}} variant="contained">New Purchase</Button>
-        <PurchaseModal firms={firms} brands={brands} products={products} mode={mode} setMode={setMode} open={open} setOpen={setOpen} purchase={selectedPurchase}/>
+        <PurchaseModal firms={firms} mode={mode} setMode={setMode} open={open} setOpen={setOpen} purchase={selectedPurchase}/>
   <div style={{ height: 400, width: '100%' }}>
   <DataGrid
     rows={rows}

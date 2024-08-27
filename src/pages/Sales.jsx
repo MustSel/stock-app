@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 const Sales = () => {
   const { getDatas, deleteDatas } = useStockRequest();
-  const { sales, brands, products } = useSelector((state) => state.getData);
+  const { sales, brands } = useSelector((state) => state.getData);
   const [open, setOpen] = useState(false);
   const [selectedSale, setSelectedSale] = useState(null);
   const [mode, setMode] = useState("new");
@@ -18,7 +18,6 @@ console.log(sales)
   React.useEffect(() => {
     getDatas("sales")
     getDatas("brands")
-    getDatas("products")
   }, [])
 
   const handleEdit = (row) => {
@@ -72,7 +71,7 @@ console.log(sales)
         setOpen(true)
         setMode("new")
         }} sx={{mb:"10px"}} variant="contained">New Sale</Button>
-    <SaleModal brands={brands} products={products} mode={mode} setMode={setMode} open={open} setOpen={setOpen} sale={selectedSale}/>
+    <SaleModal brands={brands} mode={mode} setMode={setMode} open={open} setOpen={setOpen} sale={selectedSale}/>
     <div style={{ width: '100%', height: 400 }}>
       <DataGrid
         rows={rows}

@@ -35,11 +35,12 @@ export default function SaleModal({
   mode,
   setMode,
   brands,
-  products,
+  
 }) {
 
     const navigate = useNavigate()  
   const { postDatas, getDatas, editDatas } = useStockRequest();
+  const [products, setProducts] = useState([]);
   const [saleInfo, setSaleInfo] = useState({
     brandId: "",
     productId: "",
@@ -48,7 +49,7 @@ export default function SaleModal({
   });
 
   useEffect(() => {
-    if (mode === "edit") {
+    if (mode === "edit" && sale) {
       setSaleInfo({
         brandId: sale.brandId._id || "",
         productId: sale.productId._id || "",
@@ -65,6 +66,20 @@ export default function SaleModal({
     }
   }, [sale, open]);
 
+  useEffect(() => {
+    if (saleInfo.brandId) {
+      getDatas(`products?filter[brandId]=${saleInfo.brandId}`)
+        .then(response => {
+          console.log(response?.data);
+          setProducts(response?.data)
+        })
+        .catch(error => console.error("Error fetching products:", error));
+    }
+    console.log(saleInfo);
+    console.log(products);
+    
+  }, [saleInfo.brandId]); // Sadece brandId değiştiğinde tetiklenir
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -73,7 +88,17 @@ export default function SaleModal({
       [name]: value,
     }));
   };
-  console.log(saleInfo);
+ 
+  const handleBrandChange = (e) => {
+    const { value } = e.target;
+    setSaleInfo(prevInfo => ({
+      ...prevInfo,
+      brandId: value,
+      productId: "",
+    }));
+    
+  };
+
   const handleClose = () => {
     setOpen(false);
     setMode("new");
@@ -107,7 +132,7 @@ export default function SaleModal({
                 id="demo-simple-select"
                 value={saleInfo.brandId}
                 label="Brand"
-                onChange={handleChange}
+                onChange={handleBrandChange}
               >
                 <MenuItem sx={{borderBottom:"1px solid grey"}} onClick={()=> navigate("/stock/brands")}>Add New Brand</MenuItem>
                 {brands?.map((item) => (

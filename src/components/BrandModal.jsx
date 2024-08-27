@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
+import { TextField, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
 import useStockRequest from "../services/useStockRequest";
 
 const style = {
@@ -23,27 +24,39 @@ const style = {
   gap: 2,
 };
 
-export default function BrandModal({ open, setOpen, brand, mode, setMode }) {
+export default function BrandModal({
+  open,
+  setOpen,
+  brand,
+  firms,
+  categories,
+  mode,
+  setMode,
+}) {
   const { postDatas, getDatas, editDatas } = useStockRequest();
   const [brandInfo, setBrandInfo] = useState({
     name: "",
     image: "",
+    firmIds: [],
+    categories: [],
   });
-  
 
+  console.log(brand);
   useEffect(() => {
-    if (mode === "edit") {
-        setBrandInfo({
+    if (mode === "edit" && brand) {
+      setBrandInfo({
         name: brand.name || "",
         image: brand.image || "",
+        firmIds: brand.firmIds.map(firm=> firm._id) || [],
+        categories: brand.categories.map(category => category._id) || "",
       });
-      
     } else {
-        setBrandInfo({
+      setBrandInfo({
         name: "",
         image: "",
+        firmIds: [],
+        categories: [],
       });
-      
     }
   }, [brand, open]);
 
@@ -55,9 +68,24 @@ export default function BrandModal({ open, setOpen, brand, mode, setMode }) {
     }));
   };
 
+  const handleFirmChange = (e) => {
+    const { value } = e.target;
+    setBrandInfo(prevInfo => ({
+      ...prevInfo,
+      firmIds: typeof value === 'string' ? value.split(',') : value,
+    }));
+  };
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    setBrandInfo(prevInfo => ({
+      ...prevInfo,
+      categories: typeof value === 'string' ? value.split(',') : value,
+    }));
+  };
+
   const handleClose = () => {
     setOpen(false);
-    setMode("new")
+    setMode("new");
   };
 
   const handleSubmit = (e) => {
@@ -99,7 +127,54 @@ export default function BrandModal({ open, setOpen, brand, mode, setMode }) {
             value={brandInfo.image}
             onChange={handleChange}
           />
-          
+          <FormControl fullWidth>
+          <InputLabel id="firm-select-label">Firms</InputLabel>
+          <Select
+            name="firmIds"
+            labelId="firm-select-label"
+            id="firm-select"
+            multiple
+            value={brandInfo.firmIds}
+            onChange={handleFirmChange}
+            renderValue={(selected) =>
+              selected?.map(id => {
+                  const firm = firms.find(firm => firm._id === id);
+                  return firm ? firm.name : "";
+                })
+                .join(", ")
+            }
+          >
+            {firms?.map(firm => (
+              <MenuItem key={firm._id} value={firm._id}>
+                {firm.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="category-select-label">Category</InputLabel>
+          <Select
+            name="categoryId"
+            labelId="category-select-label"
+            id="category-select"
+            multiple
+            value={brandInfo.categories}
+            onChange={handleCategoryChange}
+            renderValue={(selected) =>
+              selected?.map(id => {
+                  const category = categories.find(category => category._id === id);
+                  return category ? category.name : "";
+                })
+                .join(", ")
+            }
+          >
+            {categories?.map(category => (
+              <MenuItem key={category._id} value={category._id}>
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
           <Button onClick={handleSubmit} variant="contained">
             {mode === "edit" ? "Update Brand" : "Add Brand"}
           </Button>
