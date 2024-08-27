@@ -84,11 +84,11 @@ const Brands = () => {
                   }}
                 />
                   <Typography variant="body2" color="text.secondary">
-                    Firms: {item.firmIds.map((firm) => firm.name).join(", ")}
+                    Firms: {item?.firmIds?.map((firm) => firm.name).join(", ")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Categories:{" "}
-                    {item.categories
+                    {item?.categories
                       .map((category) => category.name)
                       .join(", ")}
                   </Typography>

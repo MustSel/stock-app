@@ -11,7 +11,7 @@ const useStockRequest = () => {
      dispatch(fetchStart())
     try {
       const { data } = await axiosToken(`/${endpoint}`)
-      console.log(data)
+      // console.log(data)
          dispatch(getDataSuccess({key:endpoint, data}))
          return data
     } catch (error) {
@@ -22,7 +22,7 @@ const useStockRequest = () => {
 
   const deleteDatas = async (endpoint, id) => {
     dispatch(fetchStart())
-    console.log(id)
+    // console.log(id)
     try {
       await axiosToken.delete(`/${endpoint}/${id}`)
       toastSuccessNotify(endpoint + " başarıyla silindi");
