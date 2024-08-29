@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SaleModal from '../components/SaleModal';
 import { useState } from 'react';
+import ProductTooltip from '../helper/ProductTooltip';
 
 const Sales = () => {
   const { getDatas, deleteDatas } = useStockRequest();
@@ -36,7 +37,17 @@ console.log(sales)
   const columns = [
     { field: 'date', headerName: 'Date', flex: 1 },
     { field: 'brand', headerName: 'Brand', flex: 1 },
-    { field: 'product', headerName: 'Product', flex: 1 },
+    {
+      field: 'product',
+      headerName: 'Product',
+      flex: 1,
+      renderCell: (params) => (
+        <ProductTooltip
+          title={params.row.product.name}
+          imageUrl={params.row.product.image} // Resim URL'si
+        />
+      ),
+    },
     { field: 'quantity', headerName: 'Quantity', flex: 1 },
     { field: 'price', headerName: 'Price', flex: 1 },
     { field: 'amount', headerName: 'Amount', flex: 1 },
@@ -53,14 +64,14 @@ console.log(sales)
     },
   ];
 
-  const rows = sales.map((sale) => ({
-    id: sale._id,
-    date: new Date(sale.createdAt).toLocaleString(),
-    brand: sale.brandId.name,
-    product: sale.productId.name,
-    quantity: sale.quantity,
-    price: sale.price,
-    amount: sale.amount,
+  const rows = sales?.map((sale) => ({
+    id: sale?._id,
+    date: new Date(sale?.createdAt).toLocaleString(),
+    brand: sale?.brandId?.name,
+    product: sale?.productId,
+    quantity: sale?.quantity,
+    price: sale?.price,
+    amount: sale?.amount,
     sale: sale
   }));
 

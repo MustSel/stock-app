@@ -51,8 +51,8 @@ const Brands = () => {
         open={open}
         setOpen={setOpen}
         brand={selectedBrand}
-        firms={firms} 
-  categories={categories}
+        firms={firms}
+        categories={categories}
       />
       <Container maxWidth="xl">
         <Grid container spacing={2}>
@@ -74,15 +74,16 @@ const Brands = () => {
                     {item.name}
                   </Typography>
                   <CardMedia
-                  component="img"
-                  alt={item.name}
-                  height="140"
-                  image={item.image}
-                  sx={{
-                    objectFit: "contain",
-                    marginBottom: "5px"
-                  }}
-                />
+                    component="img"
+                    alt={item.name}
+                    height="140"
+                    image={item.image}
+                    sx={{
+                      objectFit: "contain",
+                      height: "140px",
+                      marginBottom: "5px",
+                    }}
+                  />
                   <Typography variant="body2" color="text.secondary">
                     Firms: {item?.firmIds?.map((firm) => firm.name).join(", ")}
                   </Typography>
@@ -94,7 +95,6 @@ const Brands = () => {
                   </Typography>
                 </CardContent>
 
-                
                 <CardActions sx={{ flexGrow: 1, margin: "auto" }}>
                   <Button
                     onClick={() => {

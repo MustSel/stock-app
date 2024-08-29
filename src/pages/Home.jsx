@@ -1,10 +1,22 @@
-import resim from "../assets/develop.jpg"
-
+import Charts from "../components/Charts"
+import KPICards from "../components/KPICards"
+import useStockRequest from "../services/useStockRequest"
+import { useEffect } from "react"
 
 const Home = () => {
-  return (
-    <img style={{display:"block", margin:"auto"}} src={resim} alt="..." />
-  );
-};
+  const { getDatas } = useStockRequest()
 
-export default Home;
+  useEffect(() => {
+    getDatas("sales")
+    getDatas("purchases")
+  }, [])
+
+  return (
+    <div>
+      <KPICards />
+      <Charts />
+    </div>
+  )
+}
+
+export default Home

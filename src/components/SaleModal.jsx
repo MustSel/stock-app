@@ -102,6 +102,7 @@ export default function SaleModal({
   const handleClose = () => {
     setOpen(false);
     setMode("new");
+    setProducts([])
   };
 
   const handleSubmit = (e) => {

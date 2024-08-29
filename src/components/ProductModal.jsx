@@ -21,6 +21,7 @@ export default function ProductModal({
     categoryId: "",
     brandId: "",
     name: "",
+    image: "",
     firmIds: [],
   });
 
@@ -33,6 +34,7 @@ export default function ProductModal({
           categoryId: product.categoryId._id || "",
           brandId: product.brandId._id || "",
           name: product.name || "",
+          image: product.image || "",
           firmIds: product.firmIds.map(firm => firm._id) || [],
         });
         getDatas(`brands?filter[categories]=${product.categoryId._id}`)
@@ -43,6 +45,7 @@ export default function ProductModal({
           categoryId: "",
           brandId: "",
           name: "",
+          image: "",
           firmIds: [],
         });
         setBrands([]); // Ürün seçilmediğinde markaları sıfırla
@@ -96,6 +99,7 @@ export default function ProductModal({
   const handleClose = () => {
     setOpen(false);
     setMode("new");
+    setBrands([])
   };
 
   const handleSubmit = async (e) => {
@@ -168,6 +172,16 @@ export default function ProductModal({
             value={productInfo.name}
             onChange={handleChange}
           />
+          <TextField
+            required
+            type="url"
+            label="Image"
+            name="image"
+            id="image"
+            variant="outlined"
+            value={productInfo.image}
+            onChange={handleChange}
+          />
           <FormControl fullWidth>
             <InputLabel id="firm-select-label">Firms</InputLabel>
             <Select
@@ -176,6 +190,7 @@ export default function ProductModal({
               id="firm-select"
               multiple
               value={productInfo.firmIds}
+              label="Firm"
               onChange={handleFirmChange}
               renderValue={(selected) =>
                 selected?.map(id => {

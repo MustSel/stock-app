@@ -135,6 +135,7 @@ export default function BrandModal({
             id="firm-select"
             multiple
             value={brandInfo.firmIds}
+            label= "Firm"
             onChange={handleFirmChange}
             renderValue={(selected) =>
               selected?.map(id => {
@@ -159,6 +160,7 @@ export default function BrandModal({
             id="category-select"
             multiple
             value={brandInfo.categories}
+            label="Category"
             onChange={handleCategoryChange}
             renderValue={(selected) =>
               selected?.map(id => {

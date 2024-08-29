@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useState } from 'react';
 import PurchaseModal from '../components/PurchaseModal';
+import ProductTooltip from '../helper/ProductTooltip';
 
 const Purchases = () => {
   const { getDatas, deleteDatas } = useStockRequest();
@@ -20,7 +21,17 @@ const Purchases = () => {
     { field: 'date', headerName: 'Date', flex: 1 },
     { field: 'firm', headerName: 'Firm', flex: 1 },
     { field: 'brand', headerName: 'Brand', flex: 1 },
-    { field: 'product', headerName: 'Product', flex: 1 },
+    {
+      field: 'product',
+      headerName: 'Product',
+      flex: 1,
+      renderCell: (params) => (
+        <ProductTooltip
+          title={params.row.product.name}
+          imageUrl={params.row.product.image} // Resim URL'si
+        />
+      ),
+    },
     { field: 'quantity', headerName: 'Quantity', flex: 1 },
     { field: 'price', headerName: 'Price', flex: 1 },
     { field: 'amount', headerName: 'Amount', flex: 1 },
@@ -37,15 +48,15 @@ const Purchases = () => {
     },
   ];
   
-  const rows = purchases.map((purchase) => ({
-    id: purchase._id,
-    date: new Date(purchase.createdAt).toLocaleString(),
-    firm: purchase.firmId ? purchase.firmId.name : 'N/A',
-    brand: purchase.brandId.name,
-    product: purchase.productId.name,
-    quantity: purchase.quantity,
-    price: purchase.price,
-    amount: purchase.amount,
+  const rows = purchases?.map((purchase) => ({
+    id: purchase?._id,
+    date: new Date(purchase?.createdAt).toLocaleString(),
+    firm: purchase?.firmId ? purchase?.firmId?.name : 'N/A',
+    brand: purchase?.brandId?.name,
+    product: purchase?.productId,
+    quantity: purchase?.quantity,
+    price: purchase?.price,
+    amount: purchase?.amount,
     purchase: purchase
   }));
   

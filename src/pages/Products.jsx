@@ -7,6 +7,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import ProductModal from '../components/ProductModal';
 import { useState } from 'react';
+import ProductTooltip from '../helper/ProductTooltip';
 
 const Products = () => {
   const { getDatas, deleteDatas } = useStockRequest();
@@ -34,11 +35,22 @@ const Products = () => {
     });
   };
 
+
   const columns = [
     { field: 'id', headerName: 'ID', flex: 1 },
     { field: 'category', headerName: 'Category', flex: 1 },
     { field: 'brand', headerName: 'Brand', flex: 1 },
-    { field: 'name', headerName: 'Name', flex: 1 },
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 1,
+      renderCell: (params) => (
+        <ProductTooltip
+          title={params.row.name}
+          imageUrl={params.row.product.image} // Resim URL'si
+        />
+      ),
+    },
     { field: 'stock', headerName: 'Stock', flex: 1 },
     { field: 'firms', headerName: 'Firms', flex: 1 },
     {

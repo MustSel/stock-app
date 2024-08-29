@@ -126,6 +126,8 @@ export default function PurchaseModal({
   const handleClose = () => {
     setOpen(false);
     setMode("new");
+    setBrands([]);
+    setProducts([])
   };
 
   const handleSubmit = (e) => {

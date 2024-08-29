@@ -23,7 +23,7 @@ const Firms = () => {
   const handleEdit = (firm) => {
     setSelectedFirm(firm);
     setOpen(true);
-    setMode("edit")
+    setMode("edit");
   };
 
   useEffect(() => {
@@ -33,13 +33,23 @@ const Firms = () => {
   return (
     <>
       <h2>Firms</h2>
-      <Button onClick={() => {
-        setOpen(true)
-        setMode("new")
-        }} sx={{ mb: "10px" }} variant="contained">
+      <Button
+        onClick={() => {
+          setOpen(true);
+          setMode("new");
+        }}
+        sx={{ mb: "10px" }}
+        variant="contained"
+      >
         New Firm
       </Button>
-      <FirmModal mode={mode} setMode={setMode} open={open} setOpen={setOpen} firm={selectedFirm} />
+      <FirmModal
+        mode={mode}
+        setMode={setMode}
+        open={open}
+        setOpen={setOpen}
+        firm={selectedFirm}
+      />
       <Container maxWidth="xl">
         <Grid container spacing={2}>
           {firms?.map((item) => (
@@ -62,6 +72,7 @@ const Firms = () => {
                   image={item.image}
                   sx={{
                     objectFit: "contain",
+                    height: "140px", // Sabit bir yükseklik belirleyin
                     mt: "15px",
                   }}
                 />
@@ -89,11 +100,10 @@ const Firms = () => {
                   >
                     <DeleteOutlineIcon />
                   </Button>
-                  <Button onClick={()=>handleEdit(item)} size="small">
+                  <Button onClick={() => handleEdit(item)} size="small">
                     <EditIcon />
                   </Button>
                 </CardActions>
-                
               </Card>
             </Grid>
           ))}
